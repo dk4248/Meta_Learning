@@ -3,3 +3,5 @@ __pycache__/
 old_checkpoints/
 *.log
 /logs/
+checkpoints_numin_aggressive/
+tectonic
