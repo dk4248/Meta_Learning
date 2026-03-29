@@ -1,0 +1,609 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{longtable}
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{multirow}
+
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,urlcolor=blue!60!black,citecolor=blue!60!black}
+\pagestyle{fancy}\fancyhf{}\rhead{Meta-Learning Project}\lhead{Codebase Documentation}\rfoot{Page \thepage}
+\titleformat{\section}{\large\bfseries\color{blue!70!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{blue!50!black}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\small\bfseries\color{blue!40!black}}{\thesubsubsection}{1em}{}
+
+\lstset{
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{green!50!black}\itshape,
+  stringstyle=\color{red!60!black},
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!30},
+  backgroundcolor=\color{gray!5},
+  columns=fullflexible,
+}
+
+\title{\textbf{\LARGE Codebase Documentation}\\[6pt]
+\Large Meta-Learning for Financial Prediction \& Abstract Reasoning\\[6pt]
+\large Meta-Learning: From Few-Shot Classification to Learning to Learn\\IIIT Delhi}
+\author{}\date{March 2026}
+
+\begin{document}
+\maketitle\thispagestyle{fancy}
+
+\tableofcontents
+\newpage
+
+%==============================================================================
+\section{Project Overview}
+%==============================================================================
+
+This project implements and evaluates \textbf{10 meta-learning algorithms} across \textbf{2 benchmarks}:
+
+\begin{enumerate}[nosep]
+  \item \textbf{Numin2}: Stock rank prediction for 50 Nifty-50 stocks using monthly trading data (Spearman correlation metric)
+  \item \textbf{1D-ARC}: Few-shot 1D sequence transformation learning from the Abstract Reasoning Corpus (token-level accuracy metric)
+\end{enumerate}
+
+\subsection{Algorithms Implemented}
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+\textbf{Family} & \textbf{Algorithm} & \textbf{Numin2 File} & \textbf{1D-ARC File} \\
+\midrule
+\multirow{4}{*}{Optimization-based} & MAML & \texttt{numin\_maml.py} & \texttt{arc\_1d\_maml.py} \\
+ & FOMAML & \texttt{numin\_fomaml.py} & \texttt{arc\_fomaml.py} \\
+ & ANIL & \texttt{numin\_anil.py} & \texttt{arc\_anil.py} \\
+ & Reptile & \texttt{numin\_reptile.py} & \texttt{arc\_reptile.py} \\
+\midrule
+\multirow{2}{*}{Metric-based} & Prototypical Networks & \texttt{numin\_protonet.py} & \texttt{arc\_protonet.py} \\
+ & Matching Networks & --- & \texttt{arc\_matching.py} \\
+\midrule
+\multirow{2}{*}{Model-based} & CNP & \texttt{numin\_cnp.py} & \texttt{arc\_cnp.py} \\
+ & Attention MAML & \texttt{numin\_attention.py} & --- \\
+\midrule
+\multirow{2}{*}{Hybrid} & Transformer MAML & \texttt{numin\_transformer.py} & \texttt{arc\_transformer\_maml.py} \\
+ & Ensemble Reptile & \texttt{numin\_ensemble.py} & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{File Overview (26 Python Files)}
+\begin{center}
+\begin{tabular}{p{3.5cm}p{10cm}}
+\toprule
+\textbf{Category} & \textbf{Files} \\
+\midrule
+Numin2 experiments (12) & \texttt{numin\_maml.py}, \texttt{numin\_fomaml.py}, \texttt{numin\_anil.py}, \texttt{numin\_reptile.py}, \texttt{numin\_reptile\_aggressive.py}, \texttt{numin\_reptile\_augmented.py}, \texttt{numin\_protonet.py}, \texttt{numin\_cnp.py}, \texttt{numin\_ensemble.py}, \texttt{numin\_ensemble\_seeds.py}, \texttt{numin\_attention.py}, \texttt{numin\_transformer.py} \\
+\midrule
+1D-ARC experiments (9) & \texttt{arc\_1d\_maml.py}, \texttt{arc\_fomaml.py}, \texttt{arc\_anil.py}, \texttt{arc\_reptile.py}, \texttt{arc\_reptile\_is20.py}, \texttt{arc\_protonet.py}, \texttt{arc\_cnp.py}, \texttt{arc\_matching.py}, \texttt{arc\_transformer\_maml.py} \\
+\midrule
+Utilities (5) & \texttt{generate\_report.py}, \texttt{per\_task\_analysis.py}, \texttt{plot\_arc\_curves.py}, \texttt{plot\_numin\_curves.py}, \texttt{run\_experiments.py} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%==============================================================================
+\section{Dataset Details}
+%==============================================================================
+
+\subsection{Numin2 --- Stock Rank Prediction}
+\begin{itemize}[nosep]
+  \item \textbf{Source}: \texttt{numin\_sample.parquet} --- daily returns for 50 Nifty-50 stocks
+  \item \textbf{Task definition}: Each month is a meta-learning task; support = first $k$ days, query = remaining days
+  \item \textbf{Input}: Sliding window of size 50 over daily returns $\in \mathbb{R}^{50 \times 50}$ (window $\times$ stocks)
+  \item \textbf{Target}: Rank ordering of 50 stocks by next-day returns (integers $0$--$49$)
+  \item \textbf{Split}: Chronological 70/15/15 train/val/test (no random shuffling to avoid temporal leakage)
+  \item \textbf{Normalization}: Per-task, computed from support set only (prevents query data leakage)
+  \item \textbf{Metric}: Spearman rank correlation between predicted and actual rankings
+\end{itemize}
+
+\subsection{1D-ARC --- Abstract Reasoning}
+\begin{itemize}[nosep]
+  \item \textbf{Source}: \texttt{1D-ARC/dataset/} --- 901 tasks across 18 transformation types
+  \item \textbf{Task types}: Move (1/2/3/dynamic pixels), Copy, Fill, Padded Fill, Flip, Mirror, Hollow, Denoise, Recolor, Scaling, Pattern Copy, etc.
+  \item \textbf{Task definition}: 3 training (input$\to$output) pairs + 1 test input; the model must infer the rule
+  \item \textbf{Input}: 1D arrays of colored tokens (values 0--9), variable length ($\leq 100$)
+  \item \textbf{Padding}: Token index 10 (dedicated padding; value 0 is a valid color)
+  \item \textbf{Vocabulary}: 11 tokens (0--9 = colors, 10 = padding)
+  \item \textbf{Output classes}: 10 (predict colors 0--9 only)
+  \item \textbf{Split}: 70/15/15 train/val/test
+  \item \textbf{Metric}: Per-token accuracy on test output (masked to exclude padding)
+\end{itemize}
+
+%==============================================================================
+\section{Numin2 Experiment Files}
+%==============================================================================
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_maml.py} --- MAML}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: Model-Agnostic Meta-Learning (Finn et al., 2017)\\
+\textbf{Key idea}: Learn an initialization $\theta$ such that a few gradient steps on a new task produce good performance.
+
+\subsubsection{Classes}
+
+\paragraph{\texttt{NuminLocalDataset(parquet\_path, window\_size=50, support\_days=5, device)}}
+\begin{itemize}[nosep]
+  \item \texttt{\_\_init\_\_}: Loads parquet file, groups by (year, month), creates monthly tasks with sliding window samples. Tasks sorted chronologically.
+  \item \texttt{\_\_getitem\_\_}: Splits task into support/query. Normalizes using \emph{support-only} statistics.
+\end{itemize}
+
+\paragraph{\texttt{FinancialEncoder(input\_dim=50, hidden\_dim=128, num\_layers=2, dropout=0.1)}}
+\begin{itemize}[nosep]
+  \item Input projection $\to$ bidirectional LSTM $\to$ multi-head self-attention $\to$ LayerNorm residual $\to$ global average pooling.
+  \item \texttt{forward(x)}: $\mathbb{R}^{B \times W \times 50} \to \mathbb{R}^{B \times 2H}$
+\end{itemize}
+
+\paragraph{\texttt{NuminRankModel(num\_stocks=50, hidden\_dim=128)}}
+\begin{itemize}[nosep]
+  \item Encoder $\to$ 3-layer MLP decoder $\to$ reshape to $(B, 50, 50)$.
+  \item Each stock gets a probability distribution over 50 rank positions.
+  \item \texttt{forward(x)}: $\mathbb{R}^{B \times W \times 50} \to \mathbb{R}^{B \times 50 \times 50}$
+\end{itemize}
+
+\paragraph{\texttt{NuminMAML(model, inner\_lr=0.01, outer\_lr=0.001, inner\_steps=5, device)}}
+\begin{itemize}[nosep]
+  \item \texttt{train\_step(task)}: Uses \texttt{torch.func.functional\_call} with \texttt{create\_graph=True} for differentiable inner loop. cuDNN disabled for LSTM double-backward compatibility. Gradient clipping at 5.0.
+  \item \texttt{evaluate(dataset, indices)}: Same adaptation loop but with detached params (no graph needed). Uses soft expected-rank predictions for Spearman correlation.
+  \item \texttt{compute\_rank\_loss}: Vectorized cross-entropy: \texttt{F.cross\_entropy(logits.reshape(B*S,C), targets.reshape(B*S))}.
+  \item \texttt{compute\_correlation}: Uses $\sum_r r \cdot \text{softmax}(\text{logits})_r$ as predicted rank (better than argmax which produces ties).
+\end{itemize}
+
+\subsubsection{CLI Arguments}
+\texttt{--data\_path}, \texttt{--epochs} (50), \texttt{--inner\_lr} (0.01), \texttt{--outer\_lr} (0.001), \texttt{--inner\_steps} (5), \texttt{--hidden\_dim} (128), \texttt{--window\_size} (50), \texttt{--support\_days} (5), \texttt{--seed} (42), \texttt{--eval\_interval} (5), \texttt{--save\_dir}, \texttt{--gpu} (0)
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_fomaml.py} --- First-Order MAML}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: FOMAML --- drops second-order gradients for efficiency.\\
+\textbf{Key difference from MAML}: Uses \texttt{deepcopy} to create task-specific model, adapts with SGD, then copies first-order gradients back to the meta-model.
+
+\subsubsection{Classes}
+\paragraph{\texttt{NuminDataset}}: Same structure as \texttt{NuminLocalDataset}. Support-only normalization.
+
+\paragraph{\texttt{Model(ns=50, hd=256)}}: Bidirectional 2-layer LSTM $\to$ LayerNorm $\to$ Linear decoder.
+
+\subsubsection{Training Loop}
+Inner loop: \texttt{deepcopy(model)} $\to$ SGD on support $\to$ compute query loss $\to$ copy \texttt{fast.grad} to \texttt{model.grad} $\to$ Adam step. No second-order derivatives needed.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_anil.py} --- ANIL}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: Almost No Inner Loop (Raghu et al., 2020)\\
+\textbf{Key idea}: Only the \emph{head} (last layer) is adapted in the inner loop; the body (encoder) is updated only through meta-gradients.
+
+\subsubsection{Classes}
+\paragraph{\texttt{ANILModel(num\_stocks=50, hidden\_dim=128)}}
+\begin{itemize}[nosep]
+  \item Body: LSTM + attention + LayerNorm + projection (frozen during inner loop)
+  \item Head: \texttt{nn.Linear(hidden\_dim, num\_stocks * num\_stocks)} (adapted during inner loop)
+\end{itemize}
+
+\paragraph{\texttt{ANIL(model, inner\_lr, outer\_lr, inner\_steps, device)}}
+\begin{itemize}[nosep]
+  \item \texttt{\_get\_head\_keys()}: Identifies decoder/head parameter keys
+  \item \texttt{train\_step}: Uses \texttt{functional\_call} with \texttt{create\_graph=True}. Only computes gradients for head keys in inner loop. Query loss backpropagates to \emph{all} parameters.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_reptile.py} --- Reptile}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: Reptile (Nichol et al., 2018)\\
+\textbf{Key idea}: Run SGD on task, then interpolate toward adapted weights: $\theta \leftarrow \theta + \epsilon(\tilde{\theta} - \theta)$.
+
+\subsubsection{Classes}
+\paragraph{\texttt{LSTMEncoder(input\_dim, hidden\_dim)}}: Bidirectional LSTM + LayerNorm + mean pooling. Calls \texttt{flatten\_parameters()} for cuDNN efficiency.
+
+\paragraph{\texttt{NuminModel(num\_stocks, hidden\_dim)}}: LSTMEncoder $\to$ 3-layer ReLU decoder.
+
+\paragraph{\texttt{Reptile(model, outer\_lr, inner\_lr, inner\_steps, device)}}
+\begin{itemize}[nosep]
+  \item \texttt{train\_step}: Saves weights $\to$ SGD inner loop on support $\to$ evaluate query (before interpolation) $\to$ Reptile interpolation with decaying $\epsilon$.
+  \item Outer LR decay: $\epsilon_t = \epsilon_0 \cdot (1 - t/T)$ (linear annealing to 0).
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_reptile\_aggressive.py} --- Aggressive Reptile}
+%----------------------------------------------------------------------
+Same algorithm as Reptile but with: \textbf{hidden\_dim=512}, \textbf{3-layer LSTM}, \textbf{inner\_steps=20}, \textbf{SGD with momentum=0.9}, \texttt{outer\_lr=0.15}, GELU activations.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_reptile\_augmented.py} --- Reptile + Augmentation}
+%----------------------------------------------------------------------
+Same as Reptile but adds \textbf{task augmentation}:
+\begin{itemize}[nosep]
+  \item Gaussian noise ($\sigma=0.02$)
+  \item Scale jitter ($\times$ Uniform(0.8, 1.2))
+  \item Time reversal (reverse sample order)
+  \item Stock masking (zero out random stock features along axis 2)
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_protonet.py} --- Prototypical Networks}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: Prototypical Networks (Snell et al., 2017) adapted for regression/ranking.
+
+\paragraph{\texttt{NuminProtoNet(num\_stocks, hidden\_dim)}}
+\begin{itemize}[nosep]
+  \item Builds per-rank prototypes by projecting $[\text{support\_enc}, \text{rank\_embedding}]$ and accumulating into rank bins.
+  \item Query prediction: concatenate query encoding with each prototype $\to$ MLP decoder $\to$ rank logits.
+  \item \textbf{No inner-loop adaptation} --- train end-to-end with Adam.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_cnp.py} --- Conditional Neural Process}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: CNP (Garnelo et al., 2018)
+
+\paragraph{\texttt{CNPModel(ns, hd)}}
+\begin{itemize}[nosep]
+  \item Encodes support (window, rank) pairs via LSTM + rank embedding, aggregates via mean pooling to a task representation $r$.
+  \item Decodes: $[r; \text{query\_enc}] \to$ rank logits.
+  \item \textbf{No inner-loop adaptation}.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_attention.py} --- Stock Attention MAML}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Models stock-to-stock relationships explicitly.
+
+\paragraph{\texttt{StockAttentionModel(num\_stocks, window\_size, hidden\_dim, num\_heads)}}
+\begin{itemize}[nosep]
+  \item Per-stock temporal LSTM encoder (processes each stock's time series independently)
+  \item Learned stock embeddings added to per-stock features
+  \item Cross-stock multi-head attention to capture inter-stock relationships
+  \item Feed-forward network per stock $\to$ rank logits
+\end{itemize}
+\textbf{Training}: MAML with \texttt{functional\_call} (same as \texttt{numin\_maml.py}).
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_transformer.py} --- Transformer MAML}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Full Transformer encoder with learnable positional encoding.
+
+\paragraph{\texttt{TransformerEncoder(input\_dim, hidden\_dim, num\_heads, num\_layers)}}
+\begin{itemize}[nosep]
+  \item Linear projection $\to$ add positional encoding $\to$ Transformer encoder layers $\to$ LayerNorm $\to$ mean pooling.
+\end{itemize}
+\textbf{Training}: MAML with \texttt{functional\_call}.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_ensemble.py} --- LSTM+Transformer Ensemble}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Combines LSTM model and Transformer model with learned softmax weights.
+
+\paragraph{\texttt{EnsembleModel(num\_stocks, hidden\_dim)}}
+\begin{itemize}[nosep]
+  \item Model1: LSTM-based (same as Reptile model)
+  \item Model2: Transformer-based (same as Transformer model)
+  \item Learned $w \in \mathbb{R}^2$ with softmax: $\text{logits} = w_1 \cdot \text{logits}_1 + w_2 \cdot \text{logits}_2$
+\end{itemize}
+\textbf{Training}: Reptile (interpolation-based meta-learning).
+
+%----------------------------------------------------------------------
+\subsection{\texttt{numin\_ensemble\_seeds.py} --- Multi-Seed Ensemble}
+%----------------------------------------------------------------------
+Loads multiple Reptile models trained with different seeds, averages their softmax predictions at inference. If no pre-trained models found, trains 3 models inline with seeds 42, 123, 456.
+
+%==============================================================================
+\section{1D-ARC Experiment Files}
+%==============================================================================
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_1d\_maml.py} --- MAML + Hebbian TTA}
+%----------------------------------------------------------------------
+\textbf{Algorithm}: MAML with optional Hebbian Test-Time Adaptation.
+
+\subsubsection{Classes}
+\paragraph{\texttt{ARC1DDataset(data\_dir, max\_seq\_len=100)}}
+\begin{itemize}[nosep]
+  \item Loads JSON task files from subdirectories. Each task: 3 train pairs + 1 test.
+  \item Pads sequences with \texttt{PAD\_IDX=10}. Vocabulary size = 11.
+\end{itemize}
+
+\paragraph{\texttt{SequenceEncoder(vocab\_size=11, embed\_dim=64, hidden\_dim=128)}}
+3-layer 1D CNN: Embedding $\to$ Conv1D $\to$ ReLU $\to$ LayerNorm ($\times$3).
+
+\paragraph{\texttt{ARC1DModel(vocab\_size=11, embed\_dim=64, hidden\_dim=128, num\_classes=10)}}
+\begin{itemize}[nosep]
+  \item \texttt{encode\_examples}: Encodes support (input, output) pairs, concatenates, mean-pools across examples.
+  \item \texttt{forward}: Encodes examples $\to$ cross-attention from query to support $\to$ MLP decoder $\to$ per-position class logits.
+\end{itemize}
+
+\paragraph{\texttt{HebbianTTA(input\_dim, output\_dim, lr=0.01)}}
+Online Hebbian learning layer using Oja's rule: $\Delta W = \eta(yx^\top - \text{diag}(y^2)W)$.
+
+\paragraph{\texttt{ARC1DModelWithHebbian}} extends base model with Hebbian adaptation. Adapts on support before predicting query.
+
+\paragraph{\texttt{MAML(model, inner\_lr, outer\_lr, inner\_steps, device)}}
+Uses \texttt{functional\_call} with leave-one-out inner loop. Cross-entropy with \texttt{ignore\_index=PAD\_IDX}.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_fomaml.py} --- First-Order MAML}
+%----------------------------------------------------------------------
+\textbf{Same architecture} as \texttt{arc\_1d\_maml.py} (CNN encoder + cross-attention + decoder).\\
+\textbf{Training}: \texttt{deepcopy} + SGD inner loop $\to$ copy gradients $\to$ Adam outer step. Leave-one-out context in inner loop.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_anil.py} --- ANIL}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Same CNN encoder + cross-attention (body) + decoder head.\\
+\textbf{Training}: \texttt{functional\_call} with \texttt{create\_graph=True}. Only decoder parameters adapted in inner loop. Meta-gradients update all parameters.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_reptile.py} / \texttt{arc\_reptile\_is20.py} --- Reptile}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Same CNN encoder + cross-attention + decoder.\\
+\textbf{Training}: Save weights $\to$ SGD inner loop (10 or 20 steps) $\to$ Reptile interpolation with linear $\epsilon$ decay.\\
+Leave-one-out context prevents inner-loop information leakage.\\
+\texttt{arc\_reptile\_is20.py}: Same but with 20 inner steps and 150 epochs.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_protonet.py} --- Prototypical Networks}
+%----------------------------------------------------------------------
+\textbf{Architecture}: Transformer-based per-position encoder.
+
+\paragraph{\texttt{ProtoNetEncoder(vocab\_size=11, embed\_dim=128, hidden\_dim=256)}}
+Embedding $\to$ 3-layer Transformer encoder $\to$ output projection. Returns per-position features.
+
+\paragraph{\texttt{ProtoNet(num\_classes=10)}}
+\begin{itemize}[nosep]
+  \item \texttt{compute\_prototypes}: For each class $c \in \{0..9\}$, averages per-position features from support outputs labeled $c$.
+  \item \texttt{forward}: Computes $-\|f(q_i) - p_c\|^2$ (negative squared Euclidean distance) as logits for each query position and each class.
+  \item \textbf{No inner-loop adaptation}.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_cnp.py} --- Conditional Neural Process}
+%----------------------------------------------------------------------
+\paragraph{\texttt{ARCCNP(hidden\_dim=128)}}
+CNN encoder. Encodes support pairs (input concat output) $\to$ mean pool $\to$ task representation $r$. Decodes $[r; \text{query\_enc}] \to$ class logits. Mask-aware pooling excludes padding.
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_matching.py} --- Matching Networks}
+%----------------------------------------------------------------------
+\paragraph{\texttt{MatchingNetwork(hidden\_dim=128)}}
+\begin{itemize}[nosep]
+  \item Per-position keys: CNN-encoded support input features (filtered by mask).
+  \item Per-position values: Embedded support output tokens (filtered by mask).
+  \item Scaled dot-product attention from each query position to all support positions.
+  \item Decoder: $[\text{query\_features}; \text{attended\_values}] \to$ class logits.
+\end{itemize}
+
+%----------------------------------------------------------------------
+\subsection{\texttt{arc\_transformer\_maml.py} --- Transformer MAML}
+%----------------------------------------------------------------------
+\paragraph{\texttt{SinusoidalPositionalEncoding(embed\_dim, max\_len=5000)}}
+Sinusoidal positional encoding (handles arbitrary sequence lengths without overflow).
+
+\paragraph{\texttt{TransformerARC(vocab\_size=11, embed\_dim=128, hidden\_dim=256, num\_heads=4, num\_layers=4)}}
+Concatenates all support inputs/outputs + query into one sequence $\to$ Transformer encoder $\to$ extract query positions $\to$ MLP decoder.
+
+\textbf{Training}: MAML with \texttt{functional\_call}, leave-one-out inner loop.
+
+%==============================================================================
+\section{Utility Files}
+%==============================================================================
+
+\subsection{\texttt{generate\_report.py}}
+Reads \texttt{results.json} from all \texttt{checkpoints\_*} directories. Displays sorted tables of validation/test metrics for both benchmarks. Uses \texttt{safe\_format()} to handle N/A and NaN values.
+
+\subsection{\texttt{per\_task\_analysis.py}}
+Evaluates the best ARC model per task type (18 types). Uses leave-one-out inner-loop adaptation. Outputs per-type accuracy table and saves to \texttt{per\_task\_analysis.json}.
+
+\subsection{\texttt{plot\_arc\_curves.py} / \texttt{plot\_numin\_curves.py}}
+Data-driven plotting scripts that read from \texttt{results.json} and log files. Generate 4-panel training curves + taxonomy bar charts. No hardcoded values.
+
+\subsection{\texttt{run\_experiments.py} / \texttt{run\_all\_experiments.sh}}
+\texttt{run\_experiments.py}: Sequential launcher for individual experiments.\\
+\texttt{run\_all\_experiments.sh}: Parallel launcher across 8 GPUs with CUDA\_VISIBLE\_DEVICES. Waits for all experiments, then auto-generates plots and reports.
+
+%==============================================================================
+\section{Common Design Patterns}
+%==============================================================================
+
+\subsection{MAML Inner Loop (Proper Implementation)}
+All MAML/ANIL files use \texttt{torch.func.functional\_call} for differentiable inner-loop optimization:
+\begin{lstlisting}[language=Python]
+from torch.func import functional_call
+
+fast_params = {k: v.clone() for k, v in model.named_parameters()}
+for step in range(inner_steps):
+    logits = functional_call(model, fast_params, (x,))
+    loss = F.cross_entropy(logits, targets)
+    grads = torch.autograd.grad(loss, fast_params.values(),
+                                 create_graph=True)
+    fast_params = {k: v - lr * g
+                   for (k,v), g in zip(fast_params.items(), grads)}
+# Query loss -- gradients flow back to model.parameters()
+query_loss = compute_loss(functional_call(model, fast_params, (q,)), qt)
+query_loss.backward()
+\end{lstlisting}
+
+\textbf{cuDNN compatibility}: LSTM models wrap the inner loop with \texttt{torch.backends.cudnn.flags(enabled=False)} because cuDNN does not support double backward for RNNs. SDPA (Scaled Dot-Product Attention) efficient kernels are disabled globally via \texttt{torch.backends.cuda.enable\_flash\_sdp(False)}.
+
+\subsection{Reptile Update}
+\begin{lstlisting}[language=Python]
+old_weights = {n: p.data.clone() for n, p in model.named_parameters()}
+# Inner loop SGD ...
+for name, param in model.named_parameters():
+    param.data = old_weights[name] + epsilon * (param.data - old_weights[name])
+\end{lstlisting}
+With linear decay: $\epsilon_t = \epsilon_0 \cdot (1 - t/T)$.
+
+\subsection{Data Handling}
+\begin{itemize}[nosep]
+  \item \textbf{Chronological split}: All Numin2 files use contiguous chronological train/val/test splits (no random shuffling of tasks to prevent temporal data leakage).
+  \item \textbf{Support-only normalization}: Mean and std computed from support samples only; applied to both support and query.
+  \item \textbf{ARC padding}: Dedicated padding index 10 (not 0, which is a valid color). \texttt{ignore\_index=PAD\_IDX} in cross-entropy.
+  \item \textbf{Leave-one-out}: ARC inner loops exclude the current example from the support context to prevent trivial copying.
+\end{itemize}
+
+\subsection{Evaluation}
+\begin{itemize}[nosep]
+  \item All files reload the best checkpoint (\texttt{best\_model.pt}) before test evaluation.
+  \item Numin2: Spearman correlation using soft expected-rank predictions.
+  \item 1D-ARC: Masked token-level accuracy (excluding padding positions).
+  \item Results saved to \texttt{results.json} in checkpoint directory.
+\end{itemize}
+
+%==============================================================================
+\section{Complete Method Reference}
+%==============================================================================
+
+\begin{longtable}{p{3cm}p{4cm}p{7.5cm}}
+\toprule
+\textbf{File} & \textbf{Class / Function} & \textbf{Description} \\
+\midrule
+\endhead
+
+\multicolumn{3}{l}{\textbf{--- Numin2 Experiments ---}} \\
+\midrule
+\texttt{numin\_maml} & \texttt{NuminLocalDataset} & Parquet loader, monthly tasks, chronological sort \\
+ & \texttt{FinancialEncoder} & LSTM + MHA + LayerNorm encoder \\
+ & \texttt{NuminRankModel} & Encoder + MLP decoder $\to (B,50,50)$ \\
+ & \texttt{NuminMAML} & MAML trainer with functional\_call \\
+ & \texttt{.train\_step()} & Differentiable inner loop + outer update \\
+ & \texttt{.evaluate()} & Adaptation + Spearman correlation \\
+ & \texttt{.compute\_correlation()} & Soft expected-rank Spearman \\
+\midrule
+\texttt{numin\_fomaml} & \texttt{Model(ns,hd)} & LSTM + LayerNorm + Linear decoder \\
+ & \texttt{main()} & deepcopy FOMAML, gradient copy \\
+\midrule
+\texttt{numin\_anil} & \texttt{ANILModel} & Body (LSTM+attn) + Head (Linear) \\
+ & \texttt{ANIL} & Head-only inner loop, all-param outer \\
+ & \texttt{.\_get\_head\_keys()} & Identifies decoder parameter names \\
+\midrule
+\texttt{numin\_reptile} & \texttt{LSTMEncoder} & BiLSTM + LayerNorm + pool \\
+ & \texttt{Reptile} & SGD inner loop + weight interpolation \\
+\midrule
+\texttt{numin\_reptile\_agg} & \texttt{LargeEncoder} & 3-layer LSTM + projection (512d) \\
+ & \texttt{Reptile} & SGD+momentum, 20 inner steps \\
+\midrule
+\texttt{numin\_reptile\_aug} & \texttt{NuminAugDataset} & Noise, scale, reversal, masking \\
+ & \texttt{.augment()} & Applies data augmentation pipeline \\
+\midrule
+\texttt{numin\_protonet} & \texttt{ProtoNetEncoder} & LSTM + projection encoder \\
+ & \texttt{NuminProtoNet} & Per-rank prototypes + MLP decoder \\
+\midrule
+\texttt{numin\_cnp} & \texttt{CNPModel} & Support pair encoder + query decoder \\
+ & \texttt{.encode\_support()} & LSTM + rank embedding $\to$ task repr \\
+\midrule
+\texttt{numin\_ensemble} & \texttt{EnsembleModel} & LSTM + Transformer, learned weights \\
+ & \texttt{EnsembleReptile} & Reptile for ensemble model \\
+\midrule
+\texttt{numin\_ens\_seeds} & \texttt{Model(ns,hd)} & Simple LSTM model \\
+ & \texttt{adapt\_and\_predict()} & Adapts model, returns softmax probs \\
+\midrule
+\texttt{numin\_attention} & \texttt{StockAttentionModel} & Per-stock LSTM + cross-stock attention \\
+ & \texttt{AttentionMAML} & MAML with functional\_call \\
+\midrule
+\texttt{numin\_transformer} & \texttt{TransformerEncoder} & Positional enc + Transformer layers \\
+ & \texttt{NuminTransformerMAML} & MAML with functional\_call \\
+
+\midrule
+\multicolumn{3}{l}{\textbf{--- 1D-ARC Experiments ---}} \\
+\midrule
+\texttt{arc\_1d\_maml} & \texttt{ARC1DDataset} & JSON loader, padding with idx 10 \\
+ & \texttt{SequenceEncoder} & 3-layer Conv1D encoder \\
+ & \texttt{ARC1DModel} & Cross-attention + MLP decoder \\
+ & \texttt{HebbianTTA} & Oja's rule online adaptation \\
+ & \texttt{ARC1DModelWithHebbian} & Model + Hebbian TTA layer \\
+ & \texttt{MAML} & functional\_call, leave-one-out \\
+\midrule
+\texttt{arc\_fomaml} & \texttt{ArcModel} & CNN encoder + cross-attention \\
+ & \texttt{main()} & deepcopy FOMAML, leave-one-out \\
+\midrule
+\texttt{arc\_anil} & \texttt{ANILArcModel} & Body (encoder+attn) + Head (decoder) \\
+ & \texttt{main()} & functional\_call, head-only inner loop \\
+\midrule
+\texttt{arc\_reptile} & \texttt{ARC1DModel} & CNN + cross-attention + decoder \\
+ & \texttt{Reptile} & SGD inner loop + interpolation \\
+\midrule
+\texttt{arc\_protonet} & \texttt{ProtoNetEncoder} & Transformer-based per-position enc \\
+ & \texttt{ProtoNet} & Per-class prototypes, distance logits \\
+ & \texttt{.compute\_prototypes()} & Mean of per-position features per class \\
+\midrule
+\texttt{arc\_cnp} & \texttt{ARCCNP} & Support pair encoding + conditional decoder \\
+\midrule
+\texttt{arc\_matching} & \texttt{MatchingNetwork} & Per-position attention to support \\
+\midrule
+\texttt{arc\_transf\_maml} & \texttt{SinusoidalPE} & Sinusoidal positional encoding \\
+ & \texttt{TransformerARC} & Full transformer on concat sequence \\
+ & \texttt{TransformerMAML} & MAML with functional\_call \\
+
+\midrule
+\multicolumn{3}{l}{\textbf{--- Utilities ---}} \\
+\midrule
+\texttt{generate\_report} & \texttt{load\_results()} & Reads results.json from checkpoints \\
+ & \texttt{safe\_format()} & NaN/N/A-safe value formatting \\
+\midrule
+\texttt{per\_task\_analysis} & \texttt{evaluate\_per\_type()} & Per-task-type accuracy evaluation \\
+\midrule
+\texttt{plot\_arc\_curves} & \texttt{extract\_vals()} & Extract floats from log lines \\
+ & \texttt{load\_all\_results()} & Load all ARC results.json files \\
+\midrule
+\texttt{plot\_numin\_curves} & \texttt{extract\_val\_corr()} & Extract correlation from logs \\
+ & \texttt{load\_all\_results()} & Load all Numin results.json files \\
+\midrule
+\texttt{run\_experiments} & \texttt{run\_command()} & Execute shell command with streaming \\
+\bottomrule
+\end{longtable}
+
+%==============================================================================
+\section{Experiment Execution}
+%==============================================================================
+
+\subsection{Running All Experiments}
+\begin{lstlisting}[language=bash]
+# Launch all 21 experiments across 8 A100 GPUs
+bash run_all_experiments.sh
+
+# Or run individual experiments:
+CUDA_VISIBLE_DEVICES=0 python numin_maml.py \
+    --data_path numin_sample.parquet --epochs 50 --gpu 0
+
+CUDA_VISIBLE_DEVICES=1 python arc_reptile.py \
+    --data_dir 1D-ARC/dataset --epochs 100 --gpu 0
+\end{lstlisting}
+
+\subsection{GPU Assignment (8x A100-40GB)}
+\begin{center}
+\begin{tabular}{cl}
+\toprule
+\textbf{GPU} & \textbf{Experiments} \\
+\midrule
+0 & \texttt{arc\_reptile}, \texttt{arc\_reptile\_is20} \\
+1 & \texttt{arc\_fomaml}, \texttt{arc\_anil} \\
+2 & \texttt{arc\_protonet}, \texttt{arc\_cnp}, \texttt{numin\_attention}, \texttt{numin\_transformer} \\
+3 & \texttt{arc\_matching}, \texttt{arc\_transformer\_maml} \\
+4 & \texttt{arc\_1d\_maml}, \texttt{numin\_maml} \\
+5 & \texttt{numin\_reptile}, \texttt{numin\_reptile\_aggressive}, \texttt{numin\_reptile\_augmented} \\
+6 & \texttt{numin\_fomaml}, \texttt{numin\_anil}, \texttt{numin\_cnp} \\
+7 & \texttt{numin\_protonet}, \texttt{numin\_ensemble}, \texttt{numin\_ensemble\_seeds} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Output Structure}
+Each experiment produces:
+\begin{itemize}[nosep]
+  \item \texttt{checkpoints\_<name>/best\_model.pt} --- Best model weights (by validation metric)
+  \item \texttt{checkpoints\_<name>/results.json} --- Final metrics and hyperparameters
+  \item \texttt{logs/<name>.log} --- Full training log with per-epoch metrics
+\end{itemize}
+
+\end{document}

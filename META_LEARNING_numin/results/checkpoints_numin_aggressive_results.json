@@ -1,0 +1,16 @@
+{
+  "best_val_corr": 0.6392434405142841,
+  "test_correlation": 0.6284133963132688,
+  "args": {
+    "data_path": "/raid/home/vikram_govt/MTL/course_FINAL_project/numin_sample.parquet",
+    "epochs": 100,
+    "inner_lr": 0.01,
+    "outer_lr": 0.15,
+    "inner_steps": 20,
+    "hidden_dim": 512,
+    "window_size": 50,
+    "seed": 42,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_numin_aggressive",
+    "gpu": 0
+  }
+}

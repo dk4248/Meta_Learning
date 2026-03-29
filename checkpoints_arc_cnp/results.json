@@ -1,0 +1,13 @@
+{
+  "best_val_acc": 0.8857991216359316,
+  "test_accuracy": 0.8717267259078867,
+  "args": {
+    "data_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/1D-ARC/dataset",
+    "epochs": 100,
+    "lr": 0.001,
+    "hidden_dim": 128,
+    "seed": 42,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_arc_cnp",
+    "gpu": 0
+  }
+}

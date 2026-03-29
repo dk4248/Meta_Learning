@@ -1,0 +1,16 @@
+{
+  "best_val_corr": 0.642328487897167,
+  "test_correlation": 0.6138327965128886,
+  "args": {
+    "data_path": "/raid/home/vikram_govt/MTL/course_FINAL_project/numin_sample.parquet",
+    "epochs": 100,
+    "inner_lr": 0.01,
+    "outer_lr": 0.1,
+    "inner_steps": 10,
+    "hidden_dim": 256,
+    "window_size": 50,
+    "seed": 42,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_numin_reptile",
+    "gpu": 0
+  }
+}

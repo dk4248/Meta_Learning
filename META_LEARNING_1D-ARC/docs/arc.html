@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1D-ARC Results</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,#161b22,#0d1117);padding:40px 20px;border-bottom:1px solid #30363d}
+h1{color:#58a6ff;font-size:2em}
+h2{color:#58a6ff;margin:30px 0 16px;font-size:1.4em}
+h3{color:#79c0ff;margin:20px 0 10px}
+a.back{color:#8b949e;text-decoration:none;font-size:0.9em}
+a.back:hover{color:#58a6ff}
+.subtitle{color:#8b949e;margin-top:6px}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th{background:#161b22;color:#58a6ff;padding:10px;text-align:left;border-bottom:2px solid #30363d;font-size:0.9em}
+td{padding:8px 10px;border-bottom:1px solid #21262d;font-size:0.9em}
+tr:hover{background:#161b22}
+.best{color:#3fb950;font-weight:bold}
+.zero{color:#f85149}
+.cell{display:inline-block;width:28px;height:28px;border:1px solid #30363d;text-align:center;line-height:28px;font-size:11px;font-weight:bold;border-radius:3px;margin:1px}
+.task-demo{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;margin:16px 0}
+.pair{margin:8px 0}
+.pair-label{color:#8b949e;font-size:0.85em;margin-bottom:4px}
+.arrow{color:#58a6ff;margin:0 8px;font-size:1.2em}
+.section{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
+.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:8px 16px;background:#21262d;border:1px solid #30363d;border-radius:8px;cursor:pointer;color:#8b949e;font-size:0.9em;transition:all 0.2s}
+.tab:hover,.tab.active{background:#30363d;color:#58a6ff;border-color:#58a6ff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.bar-container{margin:6px 0}
+.bar-label{display:inline-block;width:180px;font-size:0.85em;text-align:right;padding-right:10px}
+.bar-track{display:inline-block;width:calc(100% - 260px);height:20px;background:#21262d;border-radius:4px;vertical-align:middle;position:relative}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.5s}
+.bar-fill.em{background:#2980B9}
+.bar-fill.tok{background:#27AE60}
+.bar-value{display:inline-block;width:60px;font-size:0.85em;padding-left:6px;font-weight:bold}
+.legend{margin:10px 0;font-size:0.85em;color:#8b949e}
+.legend span{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:middle;margin-right:4px}
+.method-detail{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:16px;margin:12px 0}
+.method-detail h4{color:#79c0ff;margin-bottom:8px}
+.eq{background:#161b22;border:1px solid #21262d;border-radius:6px;padding:10px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.9em;color:#e6edf3;overflow-x:auto}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.75em;margin-left:6px}
+.tag.opt{background:#1f3d2a;color:#3fb950}
+.tag.metric{background:#2a1f3d;color:#bc8cff}
+.tag.model{background:#3d2a1f;color:#f0883e}
+.tag.novel{background:#3d3a1f;color:#d29922}
+footer{text-align:center;padding:30px;color:#484f58;border-top:1px solid #30363d;margin-top:40px;font-size:0.9em}
+.colors-0{background:#000;color:#fff}.colors-1{background:#0074D9;color:#fff}.colors-2{background:#FF4136;color:#fff}
+.colors-3{background:#2ECC40;color:#000}.colors-4{background:#FFDC00;color:#000}.colors-5{background:#AAA;color:#000}
+.colors-6{background:#F012BE;color:#fff}.colors-7{background:#FF851B;color:#000}.colors-8{background:#7FDBFF;color:#000}
+.colors-9{background:#870C25;color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+<a href="index.html" class="back">&larr; Back to overview</a>
+<h1>1D-ARC: Meta-Learning for Abstract Reasoning</h1>
+<p class="subtitle">7 methods &bull; 901 tasks &bull; 18 transformation types &bull; 3-shot learning</p>
+</div>
+</header>
+
+<div class="container">
+
+<!-- TASK EXAMPLES -->
+<h2>What is 1D-ARC?</h2>
+<p style="margin-bottom:16px">Each task gives 3 input&rarr;output examples. The model must infer the rule and apply it to a new input.</p>
+
+<div class="task-demo">
+<h3>Example: Move 2 Pixels Right</h3>
+<div class="pair">
+<div class="pair-label">Train 1: Input &rarr; Output</div>
+<span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-3">3</span><span class="cell colors-3">3</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+<span class="arrow">&rarr;</span>
+<span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-3">3</span><span class="cell colors-3">3</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+</div>
+<div class="pair">
+<div class="pair-label">Train 2: Input &rarr; Output</div>
+<span class="cell colors-0">0</span><span class="cell colors-7">7</span><span class="cell colors-7">7</span><span class="cell colors-7">7</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+<span class="arrow">&rarr;</span>
+<span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-7">7</span><span class="cell colors-7">7</span><span class="cell colors-7">7</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+</div>
+<div class="pair" style="margin-top:12px">
+<div class="pair-label"><strong>Test Input (model must predict output):</strong></div>
+<span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-2">2</span><span class="cell colors-2">2</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+<span class="arrow">&rarr;</span>
+<span style="color:#3fb950;font-weight:bold">?</span>
+</div>
+</div>
+
+<div class="task-demo">
+<h3>Example: Mirror (Harder)</h3>
+<div class="pair">
+<div class="pair-label">Train 1: Input &rarr; Output</div>
+<span class="cell colors-1">1</span><span class="cell colors-2">2</span><span class="cell colors-3">3</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+<span class="arrow">&rarr;</span>
+<span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span><span class="cell colors-3">3</span><span class="cell colors-2">2</span><span class="cell colors-1">1</span>
+</div>
+<div class="pair" style="margin-top:8px">
+<div class="pair-label"><strong>Test:</strong></div>
+<span class="cell colors-4">4</span><span class="cell colors-5">5</span><span class="cell colors-0">0</span><span class="cell colors-0">0</span>
+<span class="arrow">&rarr;</span>
+<span style="color:#3fb950;font-weight:bold">?</span>
+<span style="margin-left:16px;color:#8b949e;font-size:0.85em">Only 18% EM &mdash; CNN struggles with global operations</span>
+</div>
+</div>
+
+<!-- MAIN RESULTS -->
+<h2>Results: All Methods</h2>
+
+<div class="legend">
+<span style="background:#2980B9"></span> Exact Match (EM) &mdash; entire sequence must be correct
+&nbsp;&nbsp;
+<span style="background:#27AE60"></span> Token Accuracy &mdash; fraction of individual tokens correct
+</div>
+
+<div class="section">
+<div class="bar-container">
+<span class="bar-label">Matching Networks</span>
+<span class="bar-track"><span class="bar-fill em" style="width:61.8%"></span></span>
+<span class="bar-value" style="color:#2980B9">61.8%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:92.1%"></span></span>
+<span class="bar-value" style="color:#27AE60">92.1%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">FOMAML</span>
+<span class="bar-track"><span class="bar-fill em" style="width:56.6%"></span></span>
+<span class="bar-value" style="color:#2980B9">56.6%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:91.0%"></span></span>
+<span class="bar-value" style="color:#27AE60">91.0%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">ANIL</span>
+<span class="bar-track"><span class="bar-fill em" style="width:55.9%"></span></span>
+<span class="bar-value" style="color:#2980B9">55.9%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:93.9%"></span></span>
+<span class="bar-value" style="color:#27AE60">93.9%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">CNP</span>
+<span class="bar-track"><span class="bar-fill em" style="width:52.9%"></span></span>
+<span class="bar-value" style="color:#2980B9">52.9%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:88.6%"></span></span>
+<span class="bar-value" style="color:#27AE60">88.6%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">Reptile (is10)</span>
+<span class="bar-track"><span class="bar-fill em" style="width:38.2%"></span></span>
+<span class="bar-value" style="color:#2980B9">38.2%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:87.8%"></span></span>
+<span class="bar-value" style="color:#27AE60">87.8%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">Reptile (is20)</span>
+<span class="bar-track"><span class="bar-fill em" style="width:35.3%"></span></span>
+<span class="bar-value" style="color:#2980B9">35.3%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:87.5%"></span></span>
+<span class="bar-value" style="color:#27AE60">87.5%</span>
+</div>
+
+<div class="bar-container" style="margin-top:12px">
+<span class="bar-label">ProtoNet</span>
+<span class="bar-track"><span class="bar-fill em" style="width:0.5%"></span></span>
+<span class="bar-value zero">0.0%</span>
+</div>
+<div class="bar-container">
+<span class="bar-label"></span>
+<span class="bar-track"><span class="bar-fill tok" style="width:53.4%"></span></span>
+<span class="bar-value" style="color:#27AE60">53.4%</span>
+</div>
+</div>
+
+<!-- METHODS -->
+<h2>Methods</h2>
+
+<div class="tabs" id="method-tabs">
+<div class="tab active" onclick="showTab('maml')">MAML + Hebbian<span class="tag novel">Novel</span></div>
+<div class="tab" onclick="showTab('fomaml')">FOMAML</div>
+<div class="tab" onclick="showTab('anil')">ANIL</div>
+<div class="tab" onclick="showTab('reptile')">Reptile</div>
+<div class="tab" onclick="showTab('matching')">Matching Nets</div>
+<div class="tab" onclick="showTab('cnp')">CNP</div>
+<div class="tab" onclick="showTab('protonet')">ProtoNet</div>
+</div>
+
+<div id="maml" class="tab-content active">
+<div class="method-detail">
+<h4>MAML + Hebbian Test-Time Adaptation <span class="tag opt">Optimization</span><span class="tag novel">Novel</span></h4>
+<p>Model-Agnostic Meta-Learning learns an initialization that adapts well in few gradient steps. We add a <strong>Hebbian layer</strong> (Oja's rule) that adapts online from support examples before predicting the query.</p>
+<div class="eq">&theta;' = &theta; - &alpha; &nabla;&theta; L(D_support; &theta;)&nbsp;&nbsp;&nbsp;[inner loop, repeated S times]<br>&theta; &larr; &theta; - &beta; &nabla;&theta; L(D_query; &theta;')&nbsp;&nbsp;&nbsp;[outer loop, differentiates through inner]<br><br>Hebbian: &Delta;W = &eta;(yx&#x1D40; - diag(y&sup2;)W)&nbsp;&nbsp;&nbsp;[Oja's rule, adapts before query prediction]</div>
+<p>Uses <code>torch.func.functional_call</code> with <code>create_graph=True</code>. Leave-one-out inner loop prevents information leakage.</p>
+</div>
+</div>
+
+<div id="fomaml" class="tab-content">
+<div class="method-detail">
+<h4>FOMAML &mdash; First-Order MAML <span class="tag opt">Optimization</span></h4>
+<p>Drops second-order gradients for efficiency. Uses <code>deepcopy</code> for inner loop, copies first-order gradients back to meta-model. Same accuracy as full MAML but much faster.</p>
+<div class="eq">&theta; &larr; &theta; - &beta; &nabla;&theta;' L(D_query; &theta;')&nbsp;&nbsp;&nbsp;[stop gradient through inner loop]</div>
+<p><strong>Result:</strong> EM=56.6%, Token=91.0%. Best speed-accuracy tradeoff.</p>
+</div>
+</div>
+
+<div id="anil" class="tab-content">
+<div class="method-detail">
+<h4>ANIL &mdash; Almost No Inner Loop <span class="tag opt">Optimization</span></h4>
+<p>Only the <strong>decoder head</strong> adapts in the inner loop; the encoder body is frozen. Confirms the feature reuse hypothesis: the encoder learns general features, only the head needs task-specific adaptation.</p>
+<div class="eq">Inner: head' = head - &alpha; &nabla;_head L_support&nbsp;&nbsp;&nbsp;[body frozen]<br>Outer: [body; head] &larr; [body; head] - &beta; &nabla; L_query(&theta;')&nbsp;&nbsp;&nbsp;[all updated via meta-gradients]</div>
+<p><strong>Result:</strong> EM=55.9%, Token=93.9% (highest token accuracy!).</p>
+</div>
+</div>
+
+<div id="reptile" class="tab-content">
+<div class="method-detail">
+<h4>Reptile <span class="tag opt">Optimization</span></h4>
+<p>The simplest meta-learner. Run SGD on a task, then interpolate toward adapted weights. Geometric intuition: &theta; moves toward the centroid of all task optima.</p>
+<div class="eq">&theta; &larr; &theta; + &epsilon;(&theta;&#x0303; - &theta;)&nbsp;&nbsp;&nbsp;where &theta;&#x0303; = SGD^K(&theta;, D_support)</div>
+<p>Linear &epsilon; decay: &epsilon;<sub>t</sub> = &epsilon;<sub>0</sub>(1 - t/T). Two variants: 10 steps (EM=38.2%) and 20 steps (EM=35.3%).</p>
+</div>
+</div>
+
+<div id="matching" class="tab-content">
+<div class="method-detail">
+<h4>Matching Networks <span class="tag metric">Metric-based</span></h4>
+<p><strong>Best method (EM=61.8%).</strong> Per-position attention: each query position attends to all support positions to retrieve output information.</p>
+<div class="eq">attended_j = &Sigma;_i softmax(q_j &middot; k_i / &radic;d) &middot; v_i<br>logits = Decoder([query_features; attended_values])</div>
+<p>Keys = encoded support inputs. Values = embedded support output tokens. No inner loop needed.</p>
+</div>
+</div>
+
+<div id="cnp" class="tab-content">
+<div class="method-detail">
+<h4>Conditional Neural Process <span class="tag model">Model-based</span></h4>
+<p>No inner loop. Encodes support pairs, aggregates to task representation, conditions query prediction on it. Related to in-context learning.</p>
+<div class="eq">r = mean(g(input_i, output_i))&nbsp;&nbsp;&nbsp;[task representation]<br>&ycirc; = Decoder([encode(x_query); r])</div>
+<p><strong>Result:</strong> EM=52.9%. Solves half of tasks without any gradient updates.</p>
+</div>
+</div>
+
+<div id="protonet" class="tab-content">
+<div class="method-detail">
+<h4>Prototypical Networks <span class="tag metric">Metric-based</span></h4>
+<p>Builds per-class prototypes (one per color 0-9) from support outputs. Classifies by negative squared Euclidean distance. Uses Transformer encoder.</p>
+<div class="eq">p_c = mean(f(x_i)_j) for positions where y=c<br>P(y_j=c) &prop; exp(-||f(x_query)_j - p_c||&sup2;)</div>
+<p><strong>Result:</strong> EM=0.0%. Fixed embeddings cannot capture task-dependent token semantics.</p>
+</div>
+</div>
+
+<!-- PER-TASK -->
+<h2>Per-Task-Type Performance (Matching Networks)</h2>
+<p style="margin-bottom:12px;color:#8b949e">Evaluated on test set (unseen task types marked with *). Tasks seen during training achieve higher scores.</p>
+
+<table>
+<tr><th>Task Type</th><th>Split</th><th>EM (%)</th><th>Token Acc (%)</th></tr>
+<tr><td>Move 2 Pixels</td><td>Val</td><td class="best">100.0</td><td>100.0</td></tr>
+<tr><td>Hollow</td><td>Train</td><td class="best">98.0</td><td>99.9</td></tr>
+<tr><td>Move 1 Pixel</td><td>Train</td><td class="best">96.0</td><td>99.8</td></tr>
+<tr><td>Denoise (1-color)</td><td>Val</td><td class="best">94.0</td><td>98.9</td></tr>
+<tr><td>Denoise (multi-color)</td><td>Val</td><td>90.0</td><td>98.4</td></tr>
+<tr><td>Recolor by Count</td><td>Train</td><td>88.0</td><td>98.7</td></tr>
+<tr style="background:#0d2137"><td><strong>Move 2P Dynamic *</strong></td><td><strong>Test</strong></td><td><strong>85.7</strong></td><td><strong>99.3</strong></td></tr>
+<tr><td>Move 3 Pixels</td><td>Train</td><td>84.0</td><td>97.8</td></tr>
+<tr><td>Pattern Copy (1-color)</td><td>Train</td><td>78.0</td><td>98.5</td></tr>
+<tr style="background:#0d2137"><td><strong>Scale Dynamic *</strong></td><td><strong>Test</strong></td><td><strong>74.5</strong></td><td><strong>95.3</strong></td></tr>
+<tr><td>Pattern Copy (multi-color)</td><td>Train</td><td>74.0</td><td>98.8</td></tr>
+<tr><td>Flip</td><td>Train</td><td>72.0</td><td>97.7</td></tr>
+<tr><td>Recolor by OddEven</td><td>Train</td><td>46.0</td><td>90.6</td></tr>
+<tr><td>Fill</td><td>Train</td><td>46.0</td><td>86.6</td></tr>
+<tr><td>Move Dynamic</td><td>Train</td><td>38.0</td><td>89.2</td></tr>
+<tr style="background:#0d2137"><td><strong>Recolor Comparison *</strong></td><td><strong>Test</strong></td><td><strong>32.0</strong></td><td><strong>83.8</strong></td></tr>
+<tr><td>Padded Fill</td><td>Train</td><td>20.0</td><td>80.6</td></tr>
+<tr><td>Mirror</td><td>Train</td><td>18.0</td><td>83.4</td></tr>
+</table>
+<p style="color:#8b949e;font-size:0.85em">* = Unseen task types (test split). The model generalizes: 85.7% EM on Move 2P Dynamic despite never training on this type.</p>
+
+</div>
+
+<footer>
+<a href="index.html" style="color:#58a6ff">&larr; Back to overview</a> &bull;
+<a href="https://github.com/dk4248/Meta_Learning" style="color:#58a6ff">GitHub</a>
+</footer>
+
+<script>
+function showTab(id){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

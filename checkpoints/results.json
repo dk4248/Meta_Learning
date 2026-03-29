@@ -1,0 +1,18 @@
+{
+  "best_val_acc": 0.695081736761603,
+  "test_overall_acc": 0.6599532983070636,
+  "test_mean_task_acc": 0.6572384995648896,
+  "args": {
+    "data_dir": "1D-ARC/dataset",
+    "epochs": 2,
+    "batch_size": 4,
+    "inner_lr": 0.01,
+    "outer_lr": 0.001,
+    "inner_steps": 5,
+    "hidden_dim": 128,
+    "embed_dim": 64,
+    "seed": 42,
+    "eval_interval": 1,
+    "save_dir": "checkpoints"
+  }
+}

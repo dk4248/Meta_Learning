@@ -1,0 +1,20 @@
+{
+  "best_val_corr": 0.7584272566169323,
+  "test_loss": 2.2264746725559235,
+  "test_accuracy": 0.5496753007173538,
+  "test_correlation": 0.6694592967056954,
+  "args": {
+    "data_path": "/raid/home/vikram_govt/MTL/course_FINAL_project/numin_sample.parquet",
+    "epochs": 50,
+    "inner_lr": 0.01,
+    "outer_lr": 0.001,
+    "inner_steps": 3,
+    "hidden_dim": 256,
+    "window_size": 50,
+    "support_days": 5,
+    "seed": 42,
+    "eval_interval": 5,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_numin_anil",
+    "gpu": 0
+  }
+}

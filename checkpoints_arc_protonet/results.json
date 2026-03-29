@@ -1,0 +1,15 @@
+{
+  "best_val_acc": 0.5887541396322727,
+  "test_overall_acc": 0.5668417980151781,
+  "test_mean_task_acc": 0.5587493487303603,
+  "args": {
+    "data_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/1D-ARC/dataset",
+    "epochs": 100,
+    "lr": 0.001,
+    "hidden_dim": 256,
+    "embed_dim": 128,
+    "seed": 42,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_arc_protonet",
+    "gpu": 0
+  }
+}

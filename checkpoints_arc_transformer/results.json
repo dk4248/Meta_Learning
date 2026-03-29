@@ -1,0 +1,7 @@
+{
+  "test_accuracy": 0.8278,
+  "best_val_acc": 0.0,
+  "args": {
+    "epochs": "partial (16/100)"
+  }
+}

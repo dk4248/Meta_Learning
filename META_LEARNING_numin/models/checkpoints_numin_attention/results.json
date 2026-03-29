@@ -1,0 +1,16 @@
+{
+  "best_val_corr": 0.6491581756334276,
+  "test_correlation": 0.6428562337103334,
+  "args": {
+    "data_path": "numin_sample.parquet",
+    "epochs": 50,
+    "inner_lr": 0.01,
+    "outer_lr": 0.0005,
+    "inner_steps": 3,
+    "hidden_dim": 128,
+    "window_size": 50,
+    "seed": 42,
+    "save_dir": "checkpoints_numin_attention",
+    "gpu": 0
+  }
+}

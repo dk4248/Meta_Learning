@@ -1,0 +1,92 @@
+{
+  "move_2p": {
+    "token_acc": 1.0,
+    "em": 1.0,
+    "count": 50
+  },
+  "hollow": {
+    "token_acc": 0.9985185182094574,
+    "em": 0.98,
+    "count": 50
+  },
+  "move_1p": {
+    "token_acc": 0.9975,
+    "em": 0.96,
+    "count": 50
+  },
+  "denoising_1c": {
+    "token_acc": 0.9894507598876953,
+    "em": 0.94,
+    "count": 50
+  },
+  "denoising_mc": {
+    "token_acc": 0.9844128799438476,
+    "em": 0.9,
+    "count": 50
+  },
+  "recolor_cnt": {
+    "token_acc": 0.9871909558773041,
+    "em": 0.88,
+    "count": 50
+  },
+  "move_3p": {
+    "token_acc": 0.978172835111618,
+    "em": 0.84,
+    "count": 50
+  },
+  "move_2p_dp": {
+    "token_acc": 0.9919847476482392,
+    "em": 0.84,
+    "count": 50
+  },
+  "pcopy_1c": {
+    "token_acc": 0.9851704561710357,
+    "em": 0.78,
+    "count": 50
+  },
+  "scale_dp": {
+    "token_acc": 0.9533357328059626,
+    "em": 0.7450980392156863,
+    "count": 51
+  },
+  "pcopy_mc": {
+    "token_acc": 0.9876515197753907,
+    "em": 0.74,
+    "count": 50
+  },
+  "flip": {
+    "token_acc": 0.9773494505882263,
+    "em": 0.72,
+    "count": 50
+  },
+  "recolor_oe": {
+    "token_acc": 0.9055890846252441,
+    "em": 0.46,
+    "count": 50
+  },
+  "fill": {
+    "token_acc": 0.8658253234624863,
+    "em": 0.46,
+    "count": 50
+  },
+  "move_dp": {
+    "token_acc": 0.891660977602005,
+    "em": 0.38,
+    "count": 50
+  },
+  "recolor_cmp": {
+    "token_acc": 0.8381312727928162,
+    "em": 0.32,
+    "count": 50
+  },
+  "padded_fill": {
+    "token_acc": 0.8057196176052094,
+    "em": 0.2,
+    "count": 50
+  },
+  "mirror": {
+    "token_acc": 0.833907446861267,
+    "em": 0.18,
+    "count": 50
+  }
+}

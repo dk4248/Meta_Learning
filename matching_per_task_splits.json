@@ -1,0 +1,122 @@
+{
+  "train_move_2p": {
+    "em": 1.0,
+    "token": 1.0,
+    "count": 30,
+    "split": "train"
+  },
+  "train_hollow": {
+    "em": 0.98,
+    "token": 0.9985185182094574,
+    "count": 50,
+    "split": "train"
+  },
+  "train_move_1p": {
+    "em": 0.96,
+    "token": 0.9975,
+    "count": 50,
+    "split": "train"
+  },
+  "train_recolor_cnt": {
+    "em": 0.88,
+    "token": 0.9871909558773041,
+    "count": 50,
+    "split": "train"
+  },
+  "train_move_3p": {
+    "em": 0.84,
+    "token": 0.978172835111618,
+    "count": 50,
+    "split": "train"
+  },
+  "train_pcopy_1c": {
+    "em": 0.78,
+    "token": 0.9851704561710357,
+    "count": 50,
+    "split": "train"
+  },
+  "train_pcopy_mc": {
+    "em": 0.74,
+    "token": 0.9876515197753907,
+    "count": 50,
+    "split": "train"
+  },
+  "train_flip": {
+    "em": 0.72,
+    "token": 0.9773494505882263,
+    "count": 50,
+    "split": "train"
+  },
+  "train_recolor_oe": {
+    "em": 0.46,
+    "token": 0.9055890846252441,
+    "count": 50,
+    "split": "train"
+  },
+  "train_fill": {
+    "em": 0.46,
+    "token": 0.8658253234624863,
+    "count": 50,
+    "split": "train"
+  },
+  "train_move_dp": {
+    "em": 0.38,
+    "token": 0.891660977602005,
+    "count": 50,
+    "split": "train"
+  },
+  "train_padded_fill": {
+    "em": 0.2,
+    "token": 0.8057196176052094,
+    "count": 50,
+    "split": "train"
+  },
+  "train_mirror": {
+    "em": 0.18,
+    "token": 0.833907446861267,
+    "count": 50,
+    "split": "train"
+  },
+  "val_move_2p": {
+    "em": 1.0,
+    "token": 1.0,
+    "count": 20,
+    "split": "val"
+  },
+  "val_denoising_1c": {
+    "em": 0.94,
+    "token": 0.9894507598876953,
+    "count": 50,
+    "split": "val"
+  },
+  "val_denoising_mc": {
+    "em": 0.9,
+    "token": 0.9844128799438476,
+    "count": 50,
+    "split": "val"
+  },
+  "val_move_2p_dp": {
+    "em": 0.8,
+    "token": 0.9896728793780009,
+    "count": 15,
+    "split": "val"
+  },
+  "test_move_2p_dp": {
+    "em": 0.8571428571428571,
+    "token": 0.9929755483354841,
+    "count": 35,
+    "split": "test"
+  },
+  "test_scale_dp": {
+    "em": 0.7450980392156863,
+    "token": 0.9533357328059626,
+    "count": 51,
+    "split": "test"
+  },
+  "test_recolor_cmp": {
+    "em": 0.32,
+    "token": 0.8381312727928162,
+    "count": 50,
+    "split": "test"
+  }
+}

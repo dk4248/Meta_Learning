@@ -1,0 +1,8 @@
+{
+  "test_accuracy": 0.868993713575251,
+  "best_val_acc": 0.0,
+  "args": {
+    "inner_steps": 20,
+    "epochs": "partial"
+  }
+}

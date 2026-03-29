@@ -1,0 +1,16 @@
+{
+  "best_val_acc": 0.8926394745155617,
+  "test_accuracy": 0.8983890994944993,
+  "args": {
+    "data_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/1D-ARC/dataset",
+    "epochs": 100,
+    "inner_lr": 0.01,
+    "outer_lr": 0.1,
+    "inner_steps": 10,
+    "hidden_dim": 128,
+    "embed_dim": 64,
+    "seed": 42,
+    "save_dir": "/raid/home/vikram_govt/MTL/course_FINAL_project/checkpoints_arc_reptile",
+    "gpu": 0
+  }
+}

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numin2 Results</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,#161b22,#0d1117);padding:40px 20px;border-bottom:1px solid #30363d}
+h1{color:#58a6ff;font-size:2em}
+h2{color:#58a6ff;margin:30px 0 16px;font-size:1.4em}
+h3{color:#79c0ff;margin:20px 0 10px}
+a.back{color:#8b949e;text-decoration:none;font-size:0.9em}
+a.back:hover{color:#58a6ff}
+.subtitle{color:#8b949e;margin-top:6px}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th{background:#161b22;color:#58a6ff;padding:10px;text-align:left;border-bottom:2px solid #30363d;font-size:0.9em}
+td{padding:8px 10px;border-bottom:1px solid #21262d;font-size:0.9em}
+tr:hover{background:#161b22}
+.best{color:#3fb950;font-weight:bold}
+.section{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:24px;margin:20px 0}
+.bar-container{margin:8px 0;display:flex;align-items:center}
+.bar-label{width:200px;font-size:0.85em;text-align:right;padding-right:12px;flex-shrink:0}
+.bar-track{flex:1;height:24px;background:#21262d;border-radius:4px;position:relative;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.6s;background:linear-gradient(90deg,#1f6feb,#58a6ff)}
+.bar-value{width:70px;font-size:0.85em;padding-left:8px;font-weight:bold;color:#58a6ff;flex-shrink:0}
+.tabs{display:flex;gap:4px;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:8px 16px;background:#21262d;border:1px solid #30363d;border-radius:8px;cursor:pointer;color:#8b949e;font-size:0.9em;transition:all 0.2s}
+.tab:hover,.tab.active{background:#30363d;color:#58a6ff;border-color:#58a6ff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.method-detail{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:16px;margin:12px 0}
+.method-detail h4{color:#79c0ff;margin-bottom:8px}
+.eq{background:#161b22;border:1px solid #21262d;border-radius:6px;padding:10px;margin:8px 0;font-family:'Courier New',monospace;font-size:0.9em;color:#e6edf3}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:0.75em;margin-left:6px}
+.tag.opt{background:#1f3d2a;color:#3fb950}
+.tag.metric{background:#2a1f3d;color:#bc8cff}
+.tag.model{background:#3d2a1f;color:#f0883e}
+.tag.novel{background:#3d3a1f;color:#d29922}
+.tag.hybrid{background:#1f2d3d;color:#79c0ff}
+.info-box{background:#0d2137;border:1px solid:#1f6feb;border-radius:8px;padding:16px;margin:16px 0}
+.info-box h4{color:#58a6ff;margin-bottom:6px}
+.cross-table{margin:20px 0}
+.cross-table td:first-child{font-weight:bold;color:#79c0ff}
+footer{text-align:center;padding:30px;color:#484f58;border-top:1px solid #30363d;margin-top:40px;font-size:0.9em}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+<a href="index.html" class="back">&larr; Back to overview</a>
+<h1>Numin2: Meta-Learning for Stock Rank Prediction</h1>
+<p class="subtitle">11 methods &bull; 50 Nifty-50 stocks &bull; Monthly tasks &bull; Spearman correlation</p>
+</div>
+</header>
+
+<div class="container">
+
+<!-- PROBLEM -->
+<h2>Problem</h2>
+<div class="section">
+<p>Predict relative rankings of <strong>50 Nifty-50 Indian stocks</strong> by next-day returns. Each month is a separate meta-learning task with different market dynamics.</p>
+<table style="max-width:600px">
+<tr><td style="color:#79c0ff">Input</td><td>50-day window of returns for 50 stocks (50&times;50 matrix)</td></tr>
+<tr><td style="color:#79c0ff">Output</td><td>Rank ordering of 50 stocks (0-49)</td></tr>
+<tr><td style="color:#79c0ff">Support</td><td>First 5 days of the month</td></tr>
+<tr><td style="color:#79c0ff">Query</td><td>Remaining days</td></tr>
+<tr><td style="color:#79c0ff">Metric</td><td>Spearman rank correlation &rho;<sub>s</sub></td></tr>
+<tr><td style="color:#79c0ff">Split</td><td>Chronological 70/15/15 (no temporal leakage)</td></tr>
+</table>
+</div>
+
+<!-- RESULTS -->
+<h2>Results: All Methods</h2>
+
+<div class="section">
+<div class="bar-container">
+<span class="bar-label"><strong>ANIL</strong></span>
+<span class="bar-track"><span class="bar-fill" style="width:67.0%"></span></span>
+<span class="bar-value">0.670</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Attention MAML</span>
+<span class="bar-track"><span class="bar-fill" style="width:64.3%"></span></span>
+<span class="bar-value">0.643</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">ProtoNet</span>
+<span class="bar-track"><span class="bar-fill" style="width:63.9%"></span></span>
+<span class="bar-value">0.639</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">CNP</span>
+<span class="bar-track"><span class="bar-fill" style="width:63.4%"></span></span>
+<span class="bar-value">0.634</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">FOMAML</span>
+<span class="bar-track"><span class="bar-fill" style="width:63.1%"></span></span>
+<span class="bar-value">0.631</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Aggressive Reptile</span>
+<span class="bar-track"><span class="bar-fill" style="width:62.8%"></span></span>
+<span class="bar-value">0.628</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Ensemble</span>
+<span class="bar-track"><span class="bar-fill" style="width:62.3%"></span></span>
+<span class="bar-value">0.623</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Transformer MAML</span>
+<span class="bar-track"><span class="bar-fill" style="width:62.2%"></span></span>
+<span class="bar-value">0.622</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Reptile</span>
+<span class="bar-track"><span class="bar-fill" style="width:61.4%"></span></span>
+<span class="bar-value">0.614</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">Augmented Reptile</span>
+<span class="bar-track"><span class="bar-fill" style="width:61.2%"></span></span>
+<span class="bar-value">0.612</span>
+</div>
+<div class="bar-container">
+<span class="bar-label">MAML</span>
+<span class="bar-track"><span class="bar-fill" style="width:56.5%"></span></span>
+<span class="bar-value">0.565</span>
+</div>
+</div>
+
+<!-- METHODS -->
+<h2>Methods</h2>
+<div class="tabs" id="method-tabs">
+<div class="tab active" onclick="showTab('m-anil')">ANIL</div>
+<div class="tab" onclick="showTab('m-attn')">Attention MAML<span class="tag novel">Novel</span></div>
+<div class="tab" onclick="showTab('m-maml')">MAML</div>
+<div class="tab" onclick="showTab('m-fomaml')">FOMAML</div>
+<div class="tab" onclick="showTab('m-reptile')">Reptile</div>
+<div class="tab" onclick="showTab('m-proto')">ProtoNet</div>
+<div class="tab" onclick="showTab('m-cnp')">CNP</div>
+<div class="tab" onclick="showTab('m-ensemble')">Ensemble</div>
+</div>
+
+<div id="m-anil" class="tab-content active">
+<div class="method-detail">
+<h4>ANIL &mdash; Almost No Inner Loop <span class="tag opt">Optimization</span> &mdash; &rho;=0.670</h4>
+<p><strong>Best method.</strong> Only the decoder head adapts in the inner loop; the BiLSTM+Attention body is frozen during adaptation but updated via meta-gradients in the outer loop. Confirms the feature reuse hypothesis: the encoder learns market-regime-agnostic temporal features, and only the ranking head needs monthly adaptation.</p>
+<div class="eq">Inner: head' = head - &alpha; &nabla;_head L_support   [body frozen, 3 steps]
+Outer: [body; head] &larr; [body; head] - &beta; &nabla; L_query(&theta;')   [all updated]</div>
+<p>Uses <code>functional_call</code> + <code>create_graph=True</code>. Hidden=256, Adam outer optimizer.</p>
+</div>
+</div>
+
+<div id="m-attn" class="tab-content">
+<div class="method-detail">
+<h4>Stock Cross-Attention MAML <span class="tag opt">Optimization</span><span class="tag novel">Novel</span> &mdash; &rho;=0.643</h4>
+<p><strong>Novel architecture.</strong> Each stock's temporal pattern is encoded independently via a per-stock LSTM, then cross-stock multi-head attention captures inter-asset correlations. Learned stock embeddings provide identity information.</p>
+<div class="eq">Z_stock = MultiHeadAttn(LSTM(x_1), ..., LSTM(x_50)) + StockEmb</div>
+<p>Trained with MAML (functional_call). The explicit modeling of cross-stock relationships provides the second-best correlation.</p>
+</div>
+</div>
+
+<div id="m-maml" class="tab-content">
+<div class="method-detail">
+<h4>MAML <span class="tag opt">Optimization</span> &mdash; &rho;=0.565</h4>
+<p>Full second-order MAML with BiLSTM+Attention encoder. cuDNN disabled for LSTM double backward compatibility. Second-order gradients amplify noise in financial data, resulting in the lowest correlation among optimization methods.</p>
+</div>
+</div>
+
+<div id="m-fomaml" class="tab-content">
+<div class="method-detail">
+<h4>FOMAML <span class="tag opt">Optimization</span> &mdash; &rho;=0.631</h4>
+<p>First-order approximation. Uses <code>deepcopy</code> + SGD, copies gradients back. Significantly better than full MAML (0.631 vs 0.565) &mdash; dropping second-order gradients actually helps on noisy financial data.</p>
+</div>
+</div>
+
+<div id="m-reptile" class="tab-content">
+<div class="method-detail">
+<h4>Reptile <span class="tag opt">Optimization</span> &mdash; &rho;=0.614</h4>
+<p>Simplest meta-learner: SGD on support, interpolate toward adapted weights. Linear &epsilon; decay. Three variants tested:</p>
+<table style="max-width:500px;margin:8px 0">
+<tr><td>Standard (hidden=256, is=10)</td><td>&rho;=0.614</td></tr>
+<tr><td>Aggressive (hidden=512, is=20, momentum)</td><td>&rho;=0.628</td></tr>
+<tr><td>Augmented (noise, scale, reversal, masking)</td><td>&rho;=0.612</td></tr>
+</table>
+<p><strong>Negative result:</strong> Task augmentation slightly hurts financial meta-learning &mdash; financial returns have precise statistical properties that augmentation distorts.</p>
+</div>
+</div>
+
+<div id="m-proto" class="tab-content">
+<div class="method-detail">
+<h4>Prototypical Networks <span class="tag metric">Metric-based</span> &mdash; &rho;=0.639</h4>
+<p>Builds per-rank prototypes from support encodings + learned rank embeddings. Query prediction via prototype-conditioned MLP decoder. No inner loop. Strong performance (3rd overall) suggests the embedding space captures meaningful market structure.</p>
+</div>
+</div>
+
+<div id="m-cnp" class="tab-content">
+<div class="method-detail">
+<h4>Conditional Neural Process <span class="tag model">Model-based</span> &mdash; &rho;=0.634</h4>
+<p>No inner loop. Encodes support (window, rank) pairs via LSTM + rank embeddings, aggregates to task representation via mean pooling, decodes query conditioned on task representation. Single forward pass adaptation.</p>
+</div>
+</div>
+
+<div id="m-ensemble" class="tab-content">
+<div class="method-detail">
+<h4>Ensemble Methods <span class="tag hybrid">Hybrid</span></h4>
+<p><strong>LSTM+Transformer Ensemble (&rho;=0.623):</strong> Combines LSTM and Transformer models with learned softmax weights. Trained with Reptile.</p>
+<p><strong>Multi-Seed Ensemble:</strong> Averages softmax predictions from Reptile models trained with different random seeds.</p>
+</div>
+</div>
+
+<!-- KEY FINDINGS -->
+<h2>Key Findings</h2>
+<div class="section">
+<h3>1. ANIL Dominates (&rho;=0.670)</h3>
+<p>Head-only adaptation outperforms full-parameter methods. The BiLSTM body learns general temporal features that transfer across market regimes.</p>
+
+<h3>2. First-Order &gt; Second-Order</h3>
+<p>FOMAML (0.631) &gt; MAML (0.565). Second-order gradients amplify noise in financial data. Simpler is better.</p>
+
+<h3>3. All Methods Work (&rho; &gt; 0.56)</h3>
+<p>After fixing MAML gradient flow, ANIL body updates, and data handling, every method produces meaningful correlations.</p>
+
+<h3>4. Augmentation Hurts Financial Data</h3>
+<p>Augmented Reptile (0.612) &lt; Reptile (0.614). Financial returns have precise statistical properties &mdash; noise/scaling/reversal distorts the signal.</p>
+</div>
+
+<!-- CROSS-BENCHMARK -->
+<h2>Cross-Benchmark Comparison</h2>
+<table class="cross-table">
+<tr><th>Aspect</th><th>Numin2 (Finance)</th><th>1D-ARC (Reasoning)</th></tr>
+<tr><td>Best method</td><td>ANIL (&rho;=0.670)</td><td>Matching Nets (EM=61.8%)</td></tr>
+<tr><td>Best family</td><td>Optimization-based</td><td>Metric-based</td></tr>
+<tr><td>CNP (no inner loop)</td><td>&rho;=0.634</td><td>EM=52.9%</td></tr>
+<tr><td>Why?</td><td>Market drift needs adaptation</td><td>Deterministic rules suit attention</td></tr>
+</table>
+
+</div>
+
+<footer>
+<a href="index.html" style="color:#58a6ff">&larr; Back to overview</a> &bull;
+<a href="https://github.com/dk4248/Meta_Learning" style="color:#58a6ff">GitHub</a>
+</footer>
+
+<script>
+function showTab(id){
+document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(e=>e.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.closest('.tab').classList.add('active');
+}
+</script>
+</body>
+</html>

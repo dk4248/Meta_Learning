@@ -1,0 +1,62 @@
+======================================================================
+META-LEARNING COURSE PROJECT - FINAL REPORT
+Generated: 2026-03-29 19:31:53
+======================================================================
+
+======================================================================
+NUMIN2 BENCHMARK - Stock Rank Prediction
+======================================================================
+
+Task: Predict relative rankings of 50 Nifty-50 stocks
+Metric: Spearman Correlation
+
+Results:
+--------------------------------------------------
+Model                         Val Corr    Test Corr
+--------------------------------------------------
+anil                            0.7584       0.6695
+attention                       0.6492       0.6429
+protonet                        0.6525       0.6392
+cnp                             0.6456       0.6342
+fomaml                          0.6449       0.6311
+aggressive                      0.6392       0.6284
+ensemble                        0.6433       0.6231
+transformer                     0.6476       0.6223
+reptile                         0.6423       0.6138
+augmented                       0.6444       0.6117
+
+Best Model: anil
+  Test Correlation: 0.6695
+
+======================================================================
+1D-ARC BENCHMARK - Abstract Reasoning
+======================================================================
+
+Task: Few-shot 1D sequence transformation learning
+Metric: Token-level Accuracy
+
+Results:
+--------------------------------------------------
+Model                          Val Acc     Test Acc
+--------------------------------------------------
+anil                            0.9169       0.9184
+fomaml                          0.9179       0.9090
+reptile                         0.8926       0.8984
+matching                        0.8966       0.8968
+cnp                             0.8858       0.8717
+reptile_is20                    0.0000       0.8690
+transformer                     0.0000       0.8278
+protonet                        0.5888       0.5587
+
+Best Model: anil
+  Test Accuracy: 0.9184
+
+======================================================================
+SUMMARY
+======================================================================
+
+Key Findings:
+- NUMIN2: anil achieves 0.6695 test correlation
+- 1D-ARC: anil achieves 0.9184 test accuracy
+
+======================================================================

@@ -1,0 +1,15 @@
+{
+  "best_val_corr": 0.6475548972284485,
+  "test_correlation": 0.6222861066789726,
+  "args": {
+    "data_path": "numin_sample.parquet",
+    "epochs": 50,
+    "inner_lr": 0.01,
+    "outer_lr": 0.0005,
+    "inner_steps": 3,
+    "hidden_dim": 256,
+    "seed": 42,
+    "save_dir": "checkpoints_numin_transformer",
+    "gpu": 0
+  }
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta-Learning Project</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d1117;color:#c9d1d9;line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+header{text-align:center;padding:60px 20px;background:linear-gradient(135deg,#161b22,#0d1117);border-bottom:1px solid #30363d}
+h1{font-size:2.5em;color:#58a6ff;margin-bottom:10px}
+.subtitle{font-size:1.2em;color:#8b949e;margin-bottom:30px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:40px 0}
+.card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:30px;transition:transform 0.2s,border-color 0.2s}
+.card:hover{transform:translateY(-4px);border-color:#58a6ff}
+.card h2{color:#58a6ff;font-size:1.5em;margin-bottom:12px}
+.card p{color:#8b949e;margin-bottom:16px}
+.card .metric{font-size:2em;font-weight:bold;margin:16px 0}
+.card .metric.green{color:#3fb950}
+.card .metric.blue{color:#58a6ff}
+.card a{display:inline-block;background:#238636;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:600;margin-top:8px;transition:background 0.2s}
+.card a:hover{background:#2ea043}
+.badge{display:inline-block;background:#30363d;color:#c9d1d9;padding:4px 10px;border-radius:12px;font-size:0.8em;margin:2px}
+.badge.novel{background:#9e6a03;color:#fff}
+table{width:100%;border-collapse:collapse;margin:20px 0}
+th{background:#161b22;color:#58a6ff;padding:12px;text-align:left;border-bottom:2px solid #30363d}
+td{padding:10px 12px;border-bottom:1px solid #21262d}
+tr:hover{background:#161b22}
+footer{text-align:center;padding:40px;color:#484f58;border-top:1px solid #30363d;margin-top:40px}
+@media(max-width:768px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+<h1>Meta-Learning for Few-Shot Reasoning & Prediction</h1>
+<p class="subtitle">CSE559: Meta-Learning &mdash; IIIT Delhi &mdash; March 2026</p>
+<p style="color:#8b949e">10 algorithms &bull; 2 benchmarks &bull; 21 experiments &bull; 8x A100 GPUs</p>
+</div>
+</header>
+
+<div class="container">
+<div class="cards">
+
+<div class="card">
+<h2>1D-ARC &mdash; Abstract Reasoning</h2>
+<p>Few-shot sequence transformation learning. 901 tasks, 18 transformation types. Infer a rule from 3 examples.</p>
+<div class="metric green">61.8% EM</div>
+<p>Best: Matching Networks (Exact Match on unseen task types)</p>
+<div>
+<span class="badge">MAML</span><span class="badge">FOMAML</span><span class="badge">ANIL</span>
+<span class="badge">Reptile</span><span class="badge">ProtoNet</span><span class="badge">CNP</span>
+<span class="badge">Matching Nets</span><span class="badge novel">Hebbian TTA</span>
+</div>
+<a href="arc.html">View Results &amp; Demo &rarr;</a>
+</div>
+
+<div class="card">
+<h2>Numin2 &mdash; Stock Ranking</h2>
+<p>Predict relative rankings of 50 Nifty-50 stocks. Each month is a meta-learning task with shifting market dynamics.</p>
+<div class="metric blue">&rho; = 0.670</div>
+<p>Best: ANIL (Spearman correlation on test months)</p>
+<div>
+<span class="badge">MAML</span><span class="badge">FOMAML</span><span class="badge">ANIL</span>
+<span class="badge">Reptile</span><span class="badge">ProtoNet</span><span class="badge">CNP</span>
+<span class="badge">Attention MAML</span><span class="badge">Transformer</span>
+<span class="badge">Ensemble</span><span class="badge novel">Task Augmentation</span>
+</div>
+<a href="numin.html">View Results &amp; Demo &rarr;</a>
+</div>
+
+</div>
+
+<h2 style="color:#58a6ff;margin:30px 0 16px">Novel Contributions</h2>
+<table>
+<tr><th>Contribution</th><th>Benchmark</th><th>Description</th></tr>
+<tr><td><span class="badge novel">Hebbian TTA + MAML</span></td><td>1D-ARC</td><td>Oja's rule online learning combined with gradient-based MAML &mdash; biologically-inspired adaptation at test time</td></tr>
+<tr><td><span class="badge novel">Stock Cross-Attention</span></td><td>Numin2</td><td>Per-stock LSTM &rarr; cross-stock multi-head attention, modeling inter-asset correlations within MAML</td></tr>
+<tr><td><span class="badge novel">Task Augmentation</span></td><td>Numin2</td><td>Noise, scale jitter, time reversal, stock masking &mdash; negative result showing augmentation hurts financial meta-learning</td></tr>
+</table>
+
+</div>
+
+<footer>
+<p>CSE559 Meta-Learning Course Project &bull; IIIT Delhi &bull; 2026</p>
+<p style="margin-top:8px"><a href="https://github.com/dk4248/Meta_Learning" style="color:#58a6ff">GitHub Repository</a></p>
+</footer>
+
+</body>
+</html>
